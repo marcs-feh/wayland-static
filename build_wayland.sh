@@ -57,12 +57,15 @@ BuildWayland(){
 
 	ninja -C build -j$workerCount install
 
-	# Build Scanner
-	cd src/
-	gcc scanner.c -Os -fPIC -flto -o wayland-scanner -lexpat -lwayland-client -static
-	strip wayland-scanner
-	cp wayland-scanner /usr/local/bin
-	cd ..
+	# Build Scanner only works on linux musl because glibc distros seem to just
+	# hate convenience.
+	if [ "$targetName" = "linux-musl" ]; then
+		cd src/
+		gcc scanner.c -Os -fPIC -flto -o wayland-scanner -lexpat -lwayland-client -static
+		strip wayland-scanner
+		cp wayland-scanner /usr/local/bin
+		cd ..
+	fi
 
 	mkdir -p Wayland
 	cp -v \
