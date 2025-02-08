@@ -1,9 +1,15 @@
-targetName='linux-musl'
+targetName="$1"
 workerCount=$(($(nproc) * 2))
 
-set -eu
+case "$targetName" in
+	"linux-musl") echo "Musl build" ;;
+	"linux-glibc") echo "Musl build" ;;
+	*) echo "Invalid target: $targetName"; exit 1 ;;
+esac
 
-# apk add meson ninja-build zip unzip gcc make atools automake autoconf libtool musl-dev linux-headers libexpat expat-dev expat-static
+[ -z "$targetName" ] \
+
+set -eu
 
 BuildLibFFI(){
 	cd /build
